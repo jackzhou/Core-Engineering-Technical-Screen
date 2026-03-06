@@ -5,6 +5,11 @@ on its volume and mass.
 """
 
 
+REJECTED = "REJECTED"
+SPECIAL = "SPECIAL"
+STANDARD = "STANDARD"
+
+
 class Package:
     def __init__(self, width, height, length, mass):
         self.width = width
@@ -21,12 +26,22 @@ class Package:
 
     def get_stack(self):
         if self.is_bulky() and self.is_heavy():
-            return "REJECTED"
+            return REJECTED
         elif self.is_bulky() or self.is_heavy():
-            return "SPECIAL"
+            return SPECIAL
         else:
-            return "STANDARD"
+            return STANDARD
+
 
 def sort(width, height, length, mass):
+    for name, value in (
+        ("width", width),
+        ("height", height),
+        ("length", length),
+        ("mass", mass),
+    ):
+        if value <= 0:
+            raise ValueError(f"{name} must be positive")
+
     package = Package(width, height, length, mass)
     return package.stack
